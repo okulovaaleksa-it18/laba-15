@@ -1,0 +1,88 @@
+//Dynamic11. Дан указатель P1 на вершину стека(если стек пуст, то P1 = nullptr).Также дано
+//число N(> 0) и набор из N чисел.Описать тип TStack — запись с одним полем Top типа PNode
+//(поле указывает на вершину стека) — и процедуру Push(S, D), которая добавляет в стек S новый
+//элемент со значением D(S — входной и выходной параметр типа TStack, D — входной параметр
+//целого типа).С помощью процедуры Push добавить в исходный стек данный набор чисел
+//(последнее число будет вершиной стека) и вывести адрес новой вершины стека.
+
+#include <iostream>
+using namespace std;
+
+class PNode 
+{
+public:
+    int data;
+    PNode* next;
+};
+
+class TStack 
+{
+public:
+    PNode* Top; //вершина стека
+
+    //добавление элемента в стек
+    void Push(int D) 
+    {
+        PNode* newNode = new PNode;
+        newNode->data = D;
+        newNode->next = Top;
+        Top = newNode;
+    }
+
+    //вывод 
+    void Print() const 
+    {
+        PNode* temp = Top;
+        while (temp) 
+        {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    void Clear() 
+    {
+        while (Top) 
+        {
+            PNode* temp = Top;
+            Top = Top->next;
+            delete temp;
+        }
+    }
+};
+
+
+int main() 
+{
+    setlocale(LC_ALL, "RU");
+    TStack S;
+    S.Top = nullptr;
+
+    int N;
+    cout << "Введите количество элементов (N > 0): ";
+    cin >> N;
+
+    if (N <= 0) 
+    {
+        cout << "Ошибка: N должно быть больше 0." << endl;
+        return 1;
+    }
+
+    cout << "Введите " << N << " чисел: ";
+    for (int i = 0; i < N; ++i) 
+    {
+        int value;
+        cin >> value;
+        S.Push(value);
+    }
+
+    cout << "Содержимое стека: ";
+    S.Print();
+
+    cout << "Адрес вершины стека: " << S.Top << endl;
+
+    S.Clear();
+
+    return 0;
+}
