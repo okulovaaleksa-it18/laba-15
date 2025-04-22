@@ -1,0 +1,123 @@
+//ListWork59. Дан односвязный линейный список и указатель на голову списка P1.Необходимо
+//вставить значение M после каждого K - го элемента списка и вывести ссылку на последний
+//элемент полученного списка P2
+
+#include <iostream>
+using namespace std;
+
+struct Node 
+{
+    int data;
+    Node* next;
+};
+
+//добавляет элемент в конец списка
+void Add(Node*& head, int value) 
+{
+    Node* newNode = new Node{ value, nullptr };
+
+    if (!head) 
+    {
+        head = newNode;
+    }
+    else 
+    {
+        Node* temp = head;
+        while (temp->next) 
+        
+{
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+//вставка M после каждого K-го элемента
+void InsertAfterEveryKth(Node*& head, int M, int K) 
+{
+    Node* temp = head;
+    int count = 1;
+
+    while (temp) 
+    {
+        if (count % K == 0) 
+        {  // Когда счетчик делится на K
+            Node* newNode = new Node{ M, temp->next };
+            temp->next = newNode;
+            temp = newNode;  // Пропускаем вставленный элемент
+        }
+        temp = temp->next;
+        count++;
+    }
+}
+
+//поиск последнего элемента (P2)
+Node* FindLast(Node* head) 
+{
+    if (!head) return nullptr;
+    while (head->next) 
+    {
+        head = head->next;
+    }
+    return head;
+}
+
+//вывод списка
+void Print(Node* head) 
+{
+    while (head) 
+    {
+        cout << head->data << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
+//очистка списка
+void Clear(Node*& head) 
+{
+    while (head) 
+    {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
+}
+
+int main() 
+{
+    setlocale(LC_ALL, "RU");
+    Node* head = nullptr;
+    int N, M, K;
+
+    cout << "Введите количество элементов списка: ";
+    cin >> N;
+
+    cout << "Введите " << N << " чисел: ";
+    for (int i = 0; i < N; ++i) 
+    {
+        int value;
+        cin >> value;
+        Add(head, value);
+    }
+
+    cout << "Введите значение M: ";
+    cin >> M;
+
+    cout << "Введите значение K: ";
+    cin >> K;
+
+    //вставка M после каждого K-го элемента
+    InsertAfterEveryKth(head, M, K);
+
+    cout << "Измененный список: ";
+    Print(head);
+
+    // поиск последнего элемента
+    Node* P2 = FindLast(head);
+    cout << "Указатель на последний элемент (P2): " << P2 << endl;
+
+    Clear(head);
+
+    return 0;
+}
