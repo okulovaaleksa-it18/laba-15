@@ -1,0 +1,128 @@
+//Dynamic16.Дан набор из 10 чисел.Создать две очереди : первая должна содержать все
+//нечетные, а вторая — все четные числа из исходного набора(порядок чисел в каждой очереди
+//должен совпадать с порядком чисел в исходном наборе).Вывести указатели на начало и конец
+//первой, а затем второй очереди(одна из очередей может оказаться пустой; в этом случае
+//вывести для нее две константы nullptr).
+
+#include <iostream>
+using namespace std;
+
+class QNode 
+{
+public:
+    int data;
+    QNode* next;
+};
+
+
+class TQueue 
+{
+public:
+    QNode* Head;
+    QNode* Tail;
+
+//инициализация очереди
+    void Init() 
+    {
+        Head = Tail = nullptr;
+    }
+
+    // добавляет элемент в очередь
+    void Enqueue(int D) 
+    {
+        QNode* newNode = new QNode;
+        newNode->data = D;
+        newNode->next = nullptr;
+
+        if (!Head) 
+        { // если очередь пуста
+            Head = Tail = newNode;
+        }
+        else 
+        {
+            Tail->next = newNode;
+            Tail = newNode;
+        }
+    }
+
+    // вывод
+    void Print() const 
+    {
+        QNode* temp = Head;
+        while (temp) 
+        {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+    void Clear() 
+    {
+        while (Head) 
+        {
+            QNode* temp = Head;
+            Head = Head->next;
+            delete temp;
+        }
+        Tail = nullptr;
+    }
+};
+
+int main()
+{
+    setlocale(LC_ALL, "RU");
+    TQueue OddQueue, EvenQueue;
+    OddQueue.Init();
+    EvenQueue.Init();
+
+    int numbers[10];
+
+    cout << "Введите 10 чисел: ";
+    for (int i = 0; i < 10; ++i)
+    {
+        cin >> numbers[i];
+    }
+
+    // разделение чисел на четные и нечетные
+    for (int i = 0; i < 10; ++i)
+    {
+        if (numbers[i] % 2 == 0)
+        {
+            EvenQueue.Enqueue(numbers[i]);
+        }
+        else
+        {
+            OddQueue.Enqueue(numbers[i]);
+        }
+    }
+
+    // вывод очереди и указателей на первую очередь (нечетные числа)
+    cout << "Первая очередь (нечетные числа): ";
+    OddQueue.Print();
+    cout << "Указатель Head: ";
+    if (OddQueue.Head) cout << OddQueue.Head;
+    else cout << "nullptr";
+
+    cout << ", Tail: ";
+    if (OddQueue.Tail) cout << OddQueue.Tail;
+    else cout << "nullptr";
+    cout << endl;
+
+    // вывод очереди и указателей на вторую очередь (четные числа)
+    cout << "Вторая очередь (четные числа): ";
+    EvenQueue.Print();
+    cout << "Указатель Head: ";
+    if (EvenQueue.Head) cout << EvenQueue.Head;
+    else cout << "nullptr";
+
+    cout << ", Tail: ";
+    if (EvenQueue.Tail) cout << EvenQueue.Tail;
+    else cout << "nullptr";
+    cout << endl;
+
+    OddQueue.Clear();
+    EvenQueue.Clear();
+
+    return 0;
+}
